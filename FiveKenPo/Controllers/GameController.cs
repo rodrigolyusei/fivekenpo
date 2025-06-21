@@ -26,13 +26,18 @@ namespace FiveKenPo.Controllers
             public required string Move { get; set; }
         }
 
+        /// <summary>
+        /// Cadastra um novo jogador na rodada.
+        /// </summary>
+        /// <param name="request">Nome do jogador não nulo a ser cadastrado.</param>
+        /// <returns>Resultado do cadastro.</returns>
         [HttpPost("player")]
         public IActionResult AddPlayer([FromBody] AddPlayerRequest request)
         {
             try
             {
                 _gameService.AddPlayer(request.Name);
-                return Ok(new { message = $"'{request.Name}' cadastrado com sucesso." });
+                return Ok(new { message = $"Jogador '{request.Name}' cadastrado com sucesso." });
             }
             catch (ArgumentException ex)
             {
@@ -40,6 +45,11 @@ namespace FiveKenPo.Controllers
             }
         }
 
+        /// <summary>
+        /// Remove o jogador indicado pelo nome da rodada.
+        /// </summary>
+        /// <param name="name">Nome do jogador a ser removido.</param>
+        /// <returns>Resultado da remoção</returns>
         [HttpDelete("player/{name}")]
         public IActionResult RemovePlayer(string name)
         {
@@ -47,7 +57,7 @@ namespace FiveKenPo.Controllers
             {
                 Player removedPlayer = _gameService.GetPlayer(name);
                 _gameService.RemovePlayer(name);
-                return Ok(new { message = $"'{removedPlayer.Name}' removido com sucesso." });
+                return Ok(new { message = $"Jogador '{removedPlayer.Name}' removido com sucesso." });
             }
             catch (KeyNotFoundException ex)
             {
@@ -55,6 +65,11 @@ namespace FiveKenPo.Controllers
             }
         }
 
+        /// <summary>
+        /// Adiciona uma jogada para um jogador na rodada.
+        /// </summary>
+        /// <param name="request">Nome do jogador e a sua jogada.</param>
+        /// <returns>Resultado da adição.</returns>
         [HttpPost("move")]
         public IActionResult AddMove([FromBody] AddMoveRequest request)
         {
@@ -77,6 +92,11 @@ namespace FiveKenPo.Controllers
             }
         }
 
+        /// <summary>
+        /// Retorna o status da rodada, indicando quais jogadores já jogaram e quais ainda precisam jogar.
+        /// </summary>
+        /// <returns>Todos os jogadores com respectiva indicação se já jogou ou não.
+        /// Caso não haja nenhum jogador retorna a mensagem sobre.</returns>
         [HttpGet("round")]
         public IActionResult GetRound()
         {
@@ -102,6 +122,10 @@ namespace FiveKenPo.Controllers
             return Ok(new { message = roundStatus.TrimEnd(',', ' ') + "." });
         }
 
+        /// <summary>
+        /// Finaliza a rodada e determina o vencedor.
+        /// </summary>
+        /// <returns>Retorna o vencedor que pode ser nulo. E uma mensagem de finalização.</returns>
         [HttpPost("finish")]
         public IActionResult FinishGame()
         {

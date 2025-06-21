@@ -40,7 +40,7 @@ namespace FiveKenPo.Services
         {
             if (!Enum.IsDefined(typeof(MoveType), move))
             {
-                throw new ArgumentException("Movimento inválido.");
+                throw new ArgumentException("Movimento inválido. Escolha entre Rock, Paper, Scissors, Spock ou Lizard.");
             }
             _currentRound.AddMove(playerName, Enum.Parse<MoveType>(move, true));
         }
@@ -69,7 +69,7 @@ namespace FiveKenPo.Services
             {
                 if (player.Move == null)
                 {
-                    throw new InvalidOperationException($"Jogador '{player.Name}' ainda não jogou.");
+                    throw new InvalidOperationException($"'{player.Name}' ainda não jogou.");
                 }
 
                 int currentWins = 0;
@@ -77,7 +77,7 @@ namespace FiveKenPo.Services
                 {
                     if (opponent.Move == null)
                     {
-                        throw new InvalidOperationException($"Jogador '{opponent.Name}' ainda não jogou.");
+                        throw new InvalidOperationException($"'{opponent.Name}' ainda não jogou.");
                     }
 
                     if (player.Id == opponent.Id) continue;
