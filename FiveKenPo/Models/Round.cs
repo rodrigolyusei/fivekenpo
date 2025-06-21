@@ -2,11 +2,29 @@
 {
     public class Round
     {
-        public Dictionary<Guid, Player> Players { get; set; }
+        public Dictionary<String, Player> Players { get; set; }
 
         public Round()
         {
-            Players = new Dictionary<Guid, Player>();
+            Players = new Dictionary<String, Player>();
+        }
+
+        public void AddPlayer(Player player)
+        {
+            if (Players.ContainsKey(player.Name))
+            {
+                throw new ArgumentException("Jogador já cadastrado.");
+            }
+            Players[player.Name] = player;
+        }
+
+        public Player GetPlayer(string playerName)
+        {
+            if (!Players.TryGetValue(playerName, out Player? player))
+            {
+                throw new KeyNotFoundException("Jogador não encontrado.");
+            }
+            return player;
         }
 
         public IEnumerable<Player> GetPlayers()
@@ -14,41 +32,27 @@
             return Players.Values;
         }
 
-        public Player GetPlayer(Guid playerId)
+        public void RemovePlayer(string playerName)
         {
-            if (!Players.TryGetValue(playerId, out Player? value))
+            if (!Players.ContainsKey(playerName))
             {
-                throw new KeyNotFoundException("Jogador não cadastrado.");
+                throw new KeyNotFoundException("Jogador não encontrado.");
             }
-            return value;
+            Players.Remove(playerName);
         }
 
-        public void AddPlayer(Player player)
+        public void AddMove(string playerName, MoveType move)
         {
-            if (Players.ContainsKey(player.Id))
+            if (!Players.TryGetValue(playerName, out Player? player))
             {
-                throw new ArgumentException("Jogador já existe.");
+                throw new KeyNotFoundException("Jogador não encontrado.");
             }
-            Players[player.Id] = player;
-        }
-
-        public void RemovePlayer(Guid playerId)
-        {
-            if (!Players.ContainsKey(playerId))
+            if (player.Move != null)
             {
-                throw new KeyNotFoundException("Jogador não cadastrado.");
-            }
-            Players.Remove(playerId);
-        }
-
-        public void AddMove(Guid playerId, MoveType move)
-        {
-            if (!Players.TryGetValue(playerId, out Player? value))
-            {
-                throw new KeyNotFoundException("Jogador não cadastrado.");
+                throw new InvalidOperationException("Jogada já feita e não pode ser alterada.");
             }
 
-            value.Move = move;
+            player.Move = move;
         }
 
         public void ResetRound()

@@ -6,6 +6,45 @@ namespace FiveKenPo.Services
     {
         private readonly Round _currentRound;
 
+        public GameService()
+        {
+            _currentRound = new Round();
+        }
+
+        public void AddPlayer(string playerName)
+        {
+            if (string.IsNullOrWhiteSpace(playerName))
+            {
+                throw new ArgumentException("Nome do jogador não pode ser vazio.");
+            }
+            var player = new Player(playerName);
+            _currentRound.AddPlayer(player);
+        }
+
+        public Player GetPlayer(string playerName)
+        {
+            return _currentRound.GetPlayer(playerName);
+        }
+
+        public IEnumerable<Player> GetPlayers()
+        {
+            return _currentRound.GetPlayers();
+        }
+
+        public void RemovePlayer(string playerName)
+        {
+            _currentRound.RemovePlayer(playerName);
+        }
+
+        public void AddMove(string playerName, string move)
+        {
+            if (!Enum.IsDefined(typeof(MoveType), move))
+            {
+                throw new ArgumentException("Movimento inválido.");
+            }
+            _currentRound.AddMove(playerName, Enum.Parse<MoveType>(move, true));
+        }
+
         private static readonly Dictionary<MoveType, List<MoveType>> WinMoves = new()
         {
             { MoveType.Rock, new List<MoveType> { MoveType.Scissors, MoveType.Lizard } },
@@ -15,51 +54,12 @@ namespace FiveKenPo.Services
             { MoveType.Lizard, new List<MoveType> { MoveType.Spock, MoveType.Paper } }
         };
 
-        public GameService()
-        {
-            _currentRound = new Round();
-        }
-
-        public IEnumerable<Player> GetPlayers()
-        {
-            return _currentRound.GetPlayers();
-        }
-
-        public Player GetPlayer(Guid playerId)
-        {
-            return _currentRound.GetPlayer(playerId);
-        }
-
-        public void AddPlayer(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentException("Nome do jogador não pode ser vazio.");
-            }
-            var player = new Player(name);
-            _currentRound.AddPlayer(player);
-        }
-
-        public void RemovePlayer(Guid playerId)
-        {
-            _currentRound.RemovePlayer(playerId);
-        }
-
-        public void AddMove(Guid playerId, MoveType move)
-        {
-            if (!Enum.IsDefined(typeof(MoveType), move))
-            {
-                throw new ArgumentException("Movimento inválido.");
-            }
-            _currentRound.AddMove(playerId, move);
-        }
-
         public Player? FinishRound()
         {
             var players = _currentRound.GetPlayers().ToList();
             if (players.Count < 2)
             {
-                throw new InvalidOperationException("É necessário pelo menos dois jogadores para finalizar a rodada.");
+                throw new InvalidOperationException("É necessário de pelo menos dois jogadores para finalizar.");
             }
 
             // O vencedor é aquele que derrotou maior número de oponentes.
@@ -69,7 +69,7 @@ namespace FiveKenPo.Services
             {
                 if (player.Move == null)
                 {
-                    throw new InvalidOperationException($"Jogador {player.Name} ainda não jogou.");
+                    throw new InvalidOperationException($"Jogador \"{player.Name}\" ainda não jogou.");
                 }
 
                 int currentWins = 0;
@@ -77,7 +77,7 @@ namespace FiveKenPo.Services
                 {
                     if (opponent.Move == null)
                     {
-                        throw new InvalidOperationException($"Jogador {opponent.Name} ainda não jogou.");
+                        throw new InvalidOperationException($"Jogador \"{opponent.Name}\" ainda não jogou.");
                     }
 
                     if (player.Id == opponent.Id) continue;

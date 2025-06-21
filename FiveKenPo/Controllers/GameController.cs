@@ -22,58 +22,50 @@ namespace FiveKenPo.Controllers
             try
             {
                 _gameService.AddPlayer(playerName);
-                return Ok($"Jogador {playerName} cadastrado com sucesso.");
+                return Ok($"Jogador \"{playerName}\" cadastrado com sucesso.");
             }
             catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }
-        }
-
-        // GET: api/<GameController>/round
-        [HttpGet("player/{id}")]
-        public IActionResult GetPlayer(string id)
-        {
-            Player player = _gameService.GetPlayer(Guid.Parse(id));
-
-            if (player == null)
-            {
-                return NotFound($"Jogador com ID {id} não encontrado.");
-            }
-            return Ok($"O jogador com ID {id} é \"{player.Name}\"");
         }
 
         // DELETE: api/<GameController>/player
-        [HttpDelete("player/{id}")]
-        public IActionResult RemovePlayer(string id)
+        [HttpDelete("player/{name}")]
+        public IActionResult RemovePlayer(string name)
         {
             try
             {
-                Guid playerId = Guid.Parse(id);
-                Player removedPlayer = _gameService.GetPlayer(playerId);
-
-                _gameService.RemovePlayer(playerId);
-                return Ok($"Jogador {removedPlayer.Name} removido com sucesso.");
+                Player removedPlayer = _gameService.GetPlayer(name);
+                _gameService.RemovePlayer(name);
+                return Ok($"Jogador \"{removedPlayer.Name}\" removido com sucesso.");
             }
-            catch (ArgumentException ex)
+            catch (KeyNotFoundException ex)
             {
-                return BadRequest(ex.Message);
+                return NotFound(ex.Message);
             }
         }
 
         // POST: api/<GameController>/move
         [HttpPost("move")]
-        public IActionResult AddMove([FromBody]string id, string move)
+        public IActionResult AddMove([FromBody] string nameMove)
         {
             try
             {
-                Guid playerId = Guid.Parse(id);
-                MoveType playerMove = Enum.Parse<MoveType>(move, true);
-
-                _gameService.AddMove(playerId, playerMove);
-                return Ok($"Jogador {id} adicionou a jogada {move}.");
+                string name = nameMove.Split(' ')[0];
+                string move = nameMove.Split(' ')[1];
+                _gameService.AddMove(name, move);
+                return Ok($"Jogador \"{name}\" adicionou a jogada {move}.\nUma vez adicionada, não pode ser mais alterada.");
             }
             catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -114,14 +106,14 @@ namespace FiveKenPo.Controllers
                 Player? winner = _gameService.FinishRound();
                 if (winner != null)
                 {
-                    return Ok($"Rodada finalizada. O vencedor é {winner.Name}.");
+                    return Ok($"Rodada finalizada com vencedor: \"{winner.Name}\" Clap! Clap! Clap!");
                 }
                 else
                 {
-                    return Ok("Rodada finalizada. Não houve vencedor.");
+                    return Ok("Rodada finalizada com empate.");
                 }
             }
-            catch (ArgumentException ex)
+            catch (InvalidOperationException ex)
             {
                 return BadRequest(ex.Message);
             }
