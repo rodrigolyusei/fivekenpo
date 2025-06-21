@@ -50,13 +50,13 @@ namespace FiveKenPo.Controllers
         /// </summary>
         /// <param name="name">Nome do jogador a ser removido.</param>
         /// <returns>Resultado da remoção</returns>
-        [HttpDelete("player/{name}")]
-        public IActionResult RemovePlayer(string name)
+        [HttpDelete("player")]
+        public IActionResult RemovePlayer([FromBody] AddPlayerRequest request)
         {
             try
             {
-                Player removedPlayer = _gameService.GetPlayer(name);
-                _gameService.RemovePlayer(name);
+                Player removedPlayer = _gameService.GetPlayer(request.Name);
+                _gameService.RemovePlayer(request.Name);
                 return Ok(new { message = $"Jogador '{removedPlayer.Name}' removido com sucesso." });
             }
             catch (KeyNotFoundException ex)

@@ -2,11 +2,6 @@
 Programa que analise o resultado de múltiplos jogadores em um jogo de jokenpo.
 
 ## Execução
-### Requisitos
-- .NET 8.0 SDK ou superior
-- C# 12.0 ou superior
-- Ferramentas de linha de comando do .NET
-
 ### Comandos
 Com o repositório clonado, vá para o diretório FiveKenPo, compile e execute:
 ```
@@ -22,7 +17,7 @@ dotnet test
 ```
 
 ## Endpoints (API Routes)
-Com a execução do programa, é apresentado no terminal o endereço da API.\
+Com a execução do programa, o endereço da API é mostrado no terminal.\
 Por meio desse endereço você pode acessar as rotas abaixo:
 ```
 POST /api/Game/player
@@ -31,26 +26,30 @@ POST /api/Game/move
 GET /api/Game/round
 POST /api/Game/finish
 ```
-Algumas rotas requerem o envio de um JSON no corpo da requisição:
-
-### POST /api/Game/player
+Algumas rotas requerem o envio de um JSON no corpo da requisição:\
+Para adicionar jogador, faça a requisição `POST /api/Game/player` com o corpo no formato:
 ```json
 {
   "name": "Nome do Jogador"
 }
 ```
-
-### POST /api/Game/move
-As jogadas válidas são: "Rock", "Paper", "Scissors", "Lizard" e "Spock".\
+Para remover jogador, faça a requisição `DELETE /api/Game/player` com o corpo no formato:
+```json
+{
+  "name": "Nome do Jogador"
+}
+```
+Para adicinar uma jogada, faça a requisição `POST /api/Game/move` com o corpo no formato:
 ```json
 {
   "name": "Nome do Jogador",
   "move": "Spock"
 }
 ```
+As jogadas válidas são: "Rock", "Paper", "Scissors", "Lizard" e "Spock".
 
 ## Detalhes sobre o Jogo
 - O jogo aceita quantidade "ilimitada" de jogadores, depende da memória disponível.
-- Não foi utilizada um banco de dados, os dados são armazenados em memória como Singleton.
-- Quando uma jogada é registrada não pode ser alterada, para evitar que outro jogador mude por ele.
-- O vencedor da rodada é definido pelo jogador que derrotou mais quantidade de adversários.
+- Não foi utilizada um banco de dados, os dados são armazenados em memória.
+- Quando uma jogada é registrada, ela não pode ser alterada para evitar que outro jogador mude por ele.
+- O vencedor da rodada é definido pelo jogador que derrotou mais quantidades de adversários.
