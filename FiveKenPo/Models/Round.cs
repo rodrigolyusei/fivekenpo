@@ -9,6 +9,20 @@
             Players = new Dictionary<Guid, Player>();
         }
 
+        public IEnumerable<Player> GetPlayers()
+        {
+            return Players.Values;
+        }
+
+        public Player GetPlayer(Guid playerId)
+        {
+            if (!Players.ContainsKey(playerId))
+            {
+                throw new KeyNotFoundException("Jogador não cadastrado.");
+            }
+            return Players[playerId];
+        }
+
         public void AddPlayer(Player player)
         {
             if (Players.ContainsKey(player.Id))
@@ -36,12 +50,7 @@
             Players[playerId].Move = move;
         }
 
-        public IEnumerable<Player> GetPlayers()
-        {
-            return Players.Values;
-        }
-
-        public void FinishRound()
+        public void ResetRound()
         {
             Players.Clear();
         }
