@@ -4,7 +4,7 @@ namespace FiveKenPo.Services
 {
     public class GameService
     {
-        private Round _currentRound;
+        private readonly Round _currentRound;
 
         private static readonly Dictionary<MoveType, List<MoveType>> WinMoves = new()
         {

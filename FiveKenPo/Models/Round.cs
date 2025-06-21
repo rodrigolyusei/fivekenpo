@@ -16,11 +16,11 @@
 
         public Player GetPlayer(Guid playerId)
         {
-            if (!Players.ContainsKey(playerId))
+            if (!Players.TryGetValue(playerId, out Player? value))
             {
                 throw new KeyNotFoundException("Jogador não cadastrado.");
             }
-            return Players[playerId];
+            return value;
         }
 
         public void AddPlayer(Player player)
@@ -43,11 +43,12 @@
 
         public void AddMove(Guid playerId, MoveType move)
         {
-            if (!Players.ContainsKey(playerId))
+            if (!Players.TryGetValue(playerId, out Player? value))
             {
                 throw new KeyNotFoundException("Jogador não cadastrado.");
             }
-            Players[playerId].Move = move;
+
+            value.Move = move;
         }
 
         public void ResetRound()

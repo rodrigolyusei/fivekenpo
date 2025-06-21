@@ -1,15 +1,17 @@
+using FiveKenPo.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// Adiciona serviços pro container.
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+// Adiciona como singletron para garantir uso do mesmo objeto.
+builder.Services.AddSingleton<GameService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configura o canal para requisições HTTP.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

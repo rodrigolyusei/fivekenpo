@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using FiveKenPo.Services;
+using FiveKenPo.Models;
 
 namespace FiveKenPo.Controllers
 {
@@ -8,39 +8,123 @@ namespace FiveKenPo.Controllers
     [ApiController]
     public class GameController : ControllerBase
     {
+        private readonly GameService _gameService;
+
+        public GameController(GameService gameService)
+        {
+            _gameService = gameService;
+        }
+
         // POST: api/<GameController>/player
         [HttpPost("player")]
         public IActionResult AddPlayer([FromBody] string playerName)
         {
-            return Ok($"Jogador {playerName} cadastrado com sucesso.");
+            try
+            {
+                _gameService.AddPlayer(playerName);
+                return Ok($"Jogador {playerName} cadastrado com sucesso.");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // GET: api/<GameController>/round
+        [HttpGet("player/{id}")]
+        public IActionResult GetPlayer(string id)
+        {
+            Player player = _gameService.GetPlayer(Guid.Parse(id));
+
+            if (player == null)
+            {
+                return NotFound($"Jogador com ID {id} não encontrado.");
+            }
+            return Ok($"O jogador com ID {id} é \"{player.Name}\"");
         }
 
         // DELETE: api/<GameController>/player
         [HttpDelete("player/{id}")]
-        public IActionResult RemovePlayer(int id)
+        public IActionResult RemovePlayer(string id)
         {
-            return Ok($"Jogador com ID {id} removido com sucesso.");
+            try
+            {
+                Guid playerId = Guid.Parse(id);
+                Player removedPlayer = _gameService.GetPlayer(playerId);
+
+                _gameService.RemovePlayer(playerId);
+                return Ok($"Jogador {removedPlayer.Name} removido com sucesso.");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // POST: api/<GameController>/move
         [HttpPost("move")]
-        public IActionResult AddMove([FromBody] string move)
+        public IActionResult AddMove([FromBody]string id, string move)
         {
-            return Ok($"Jogada {move} cadastrado com sucesso.");
+            try
+            {
+                Guid playerId = Guid.Parse(id);
+                MoveType playerMove = Enum.Parse<MoveType>(move, true);
+
+                _gameService.AddMove(playerId, playerMove);
+                return Ok($"Jogador {id} adicionou a jogada {move}.");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // GET: api/<GameController>/round
         [HttpGet("round")]
         public IActionResult GetRound()
         {
-            return Ok();
+            var players = _gameService.GetPlayers();
+            if(players.Count() == 0)
+            {
+                return Ok("Nenhum jogador cadastrado.");
+            }
+
+            string roundStatus = "";
+            foreach (var player in players)
+            {
+                if (player.Move == null)
+                {
+                    roundStatus += $"\"{player.Name}\" precisa jogar,";
+                }
+                else
+                {
+                    roundStatus += $"\"{player.Name}\" já jogou,";
+                }
+                roundStatus += " ";
+            }
+            return Ok(roundStatus.TrimEnd(',', ' ') + ".");
         }
 
         // POST: api/<GameController>/finish
         [HttpPost("finish")]
         public IActionResult FinishGame()
         {
-            return Ok("Jogo finalizado com sucesso.");
+            try
+            {
+                Player? winner = _gameService.FinishRound();
+                if (winner != null)
+                {
+                    return Ok($"Rodada finalizada. O vencedor é {winner.Name}.");
+                }
+                else
+                {
+                    return Ok("Rodada finalizada. Não houve vencedor.");
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
