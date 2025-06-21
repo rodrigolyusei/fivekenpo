@@ -1,4 +1,4 @@
-@FiveKenPo_HostAddress = http://localhost:5188
+@FiveKenPo_HostAddress = http://localhost:5016
 
 GET {{FiveKenPo_HostAddress}}/weatherforecast/
 Accept: application/json
