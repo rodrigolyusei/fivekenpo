@@ -48,6 +48,11 @@ Para adicinar uma jogada, faça a requisição `POST /api/Game/move` com o corpo
 ```
 As jogadas válidas são: "Rock", "Paper", "Scissors", "Lizard" e "Spock".
 
+## Interfaces para Requisições
+Você pode usar algumas interfaces prontas para facilidar nas requisições:
+- Swagger: acesse o endereço da API e adicione `/swagger` ao final para acessar a interface do Swagger.
+- Insomnia: você pode importar o arquivo InsomniaRequests.yaml com as rotas se tiver o Insomnia instalado.
+
 ## Detalhes sobre o Jogo
 - O jogo aceita quantidade "ilimitada" de jogadores, depende da memória disponível.
 - Não foi utilizada um banco de dados, os dados são armazenados em memória.

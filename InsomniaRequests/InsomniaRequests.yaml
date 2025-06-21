@@ -1,0 +1,147 @@
+type: collection.insomnia.rest/5.0
+name: My first collection
+meta:
+  id: wrk_421319cefd87416b85224e8cc90a8e18
+  created: 1750548134123
+  modified: 1750548134123
+collection:
+  - url: "{{domain}}player"
+    name: Adiciona Jogador
+    meta:
+      id: req_1005e98ed7dc48409109e19f9d7302a9
+      created: 1750548134191
+      modified: 1750548618314
+      isPrivate: false
+      sortKey: -1750548435261
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"name": "Jogador Bom"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.1.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{domain}}player"
+    name: Remove Jogador
+    meta:
+      id: req_7b8a5a041e124c0580f28b7282eeedc2
+      created: 1750548435161
+      modified: 1750548706577
+      isPrivate: false
+      sortKey: -1750548435161
+    method: DELETE
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"name": "Jogador Bom"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.1.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{domain}}move"
+    name: Adiciona Jogada
+    meta:
+      id: req_4f8b062ff7d34a37a766b96ad9ba5915
+      created: 1750548671101
+      modified: 1750548885648
+      isPrivate: false
+      sortKey: -1750548435061
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"name": "Jogador Bom",
+        	"move": "Lizard"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.1.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{domain}}round"
+    name: New Request
+    meta:
+      id: req_f3f814b6b3bc4ca6b518472b6cd2697f
+      created: 1750548774360
+      modified: 1750548800123
+      isPrivate: false
+      sortKey: -1750548434961
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.1.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{domain}}finish"
+    name: New Request
+    meta:
+      id: req_dd80dd437a72452581420f0fa953afc9
+      created: 1750548807074
+      modified: 1750548821083
+      isPrivate: false
+      sortKey: -1750548434861
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/11.1.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_31ba4a7cee64bce8cabf419c7fc0b2a5cfbfbd33
+    created: 1750548134128
+    modified: 1750548134128
+environments:
+  name: Base Environment
+  meta:
+    id: env_31ba4a7cee64bce8cabf419c7fc0b2a5cfbfbd33
+    created: 1750548134126
+    modified: 1750548303430
+    isPrivate: false
+  data:
+    domain: http://localhost:5016/api/Game/
