@@ -21,7 +21,7 @@ Com a execução do programa, o endereço da API é mostrado no terminal.\
 Por meio desse endereço você pode acessar as rotas abaixo:
 ```
 POST /api/Game/player
-DELETE /api/Game/player/{name}
+DELETE /api/Game/player
 POST /api/Game/move
 GET /api/Game/round
 POST /api/Game/finish
