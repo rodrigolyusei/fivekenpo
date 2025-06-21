@@ -69,7 +69,7 @@ namespace FiveKenPo.Services
             {
                 if (player.Move == null)
                 {
-                    throw new InvalidOperationException($"Jogador \"{player.Name}\" ainda não jogou.");
+                    throw new InvalidOperationException($"Jogador '{player.Name}' ainda não jogou.");
                 }
 
                 int currentWins = 0;
@@ -77,7 +77,7 @@ namespace FiveKenPo.Services
                 {
                     if (opponent.Move == null)
                     {
-                        throw new InvalidOperationException($"Jogador \"{opponent.Name}\" ainda não jogou.");
+                        throw new InvalidOperationException($"Jogador '{opponent.Name}' ainda não jogou.");
                     }
 
                     if (player.Id == opponent.Id) continue;

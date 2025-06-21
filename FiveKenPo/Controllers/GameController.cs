@@ -32,7 +32,7 @@ namespace FiveKenPo.Controllers
             try
             {
                 _gameService.AddPlayer(request.Name);
-                return Ok(new { message = $"\"{request.Name}\" cadastrado com sucesso." });
+                return Ok(new { message = $"'{request.Name}' cadastrado com sucesso." });
             }
             catch (ArgumentException ex)
             {
@@ -47,7 +47,7 @@ namespace FiveKenPo.Controllers
             {
                 Player removedPlayer = _gameService.GetPlayer(name);
                 _gameService.RemovePlayer(name);
-                return Ok(new { message = $"\"{removedPlayer.Name}\" removido com sucesso." });
+                return Ok(new { message = $"'{removedPlayer.Name}' removido com sucesso." });
             }
             catch (KeyNotFoundException ex)
             {
@@ -61,7 +61,7 @@ namespace FiveKenPo.Controllers
             try
             {
                 _gameService.AddMove(request.Name, request.Move);
-                return Ok(new { message = $"\"{request.Name}\" adicionou a jogada {request.Move} e não pode ser mais alterada." });
+                return Ok(new { message = $"'{request.Name}' jogou '{request.Move}' e não pode ser mais alterado." });
             }
             catch (ArgumentException ex)
             {
@@ -91,11 +91,11 @@ namespace FiveKenPo.Controllers
             {
                 if (player.Move == null)
                 {
-                    roundStatus += $"\"{player.Name}\" precisa jogar,";
+                    roundStatus += $"'{player.Name}' precisa jogar,";
                 }
                 else
                 {
-                    roundStatus += $"\"{player.Name}\" já jogou,";
+                    roundStatus += $"'{player.Name}' já jogou,";
                 }
                 roundStatus += " ";
             }
@@ -110,7 +110,7 @@ namespace FiveKenPo.Controllers
                 Player? winner = _gameService.FinishRound();
                 if (winner != null)
                 {
-                    return Ok(new { winner = winner.Name, message = $"Parabéns \"{winner.Name}\"! Clap Clap Clap" });
+                    return Ok(new { winner = winner.Name, message = $"Parabéns '{winner.Name}'! Clap Clap Clap" });
                 }
                 else
                 {
